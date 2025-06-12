@@ -1,0 +1,32 @@
+name: Apply Tofu to create hello.txt
+on:
+  push:
+    branches:
+      - main
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Tofu
+        uses: opentofu/setup-opentofu@v1
+
+      - name: Apply Tofu
+        run: |
+          tofu init
+          tofu plan
+          tofu apply -auto-approve
+
+      - name: Verify otf-local/hello.txt value
+        run: |
+          if ! grep -q "Hello, OpenTofu! V2" otf-local/hello.txt; then  
+            echo "Validation failed!" && exit 1  
+          fi  
+
+      - name: Upload hello.txt artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: hello.txt
+          path: otf-local/hello.txt
