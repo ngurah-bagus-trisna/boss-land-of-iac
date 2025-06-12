@@ -15,7 +15,7 @@ provider "local" {
 }
 
 resource "local_file" "hello_world" {
-  content  = "Hello, Opentofu! V2"
+  content  = "Hello, OpenTofu! V2"
   filename = "${path.module}/otf-local/hello.txt"
   
 }
